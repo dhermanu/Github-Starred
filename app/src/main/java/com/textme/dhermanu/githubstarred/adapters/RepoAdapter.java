@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.textme.dhermanu.githubstarred.R;
+import com.textme.dhermanu.githubstarred.api.ItemClickListener;
 import com.textme.dhermanu.githubstarred.models.Owner;
 import com.textme.dhermanu.githubstarred.models.Repo;
 
@@ -24,6 +25,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
 
         public TextView repoName, userName, description, lang, type;
         public ImageView repoImage;
+        private ItemClickListener itemClickListener;
         public ViewHolder(View itemView) {
             super(itemView);
             repoName = (TextView) itemView.findViewById(R.id.repo_name);
@@ -33,12 +35,15 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
             type = (TextView) itemView.findViewById(R.id.type);
 
             repoImage = (ImageView) itemView.findViewById(R.id.repoImage);
-
+            itemView.setOnClickListener(this);
         }
 
+        public void setClickListener(ItemClickListener itemClickListener){
+            this.itemClickListener = itemClickListener;
+        }
         @Override
         public void onClick(View view) {
-
+            itemClickListener.onClick(view, getPosition(), false);
         }
     }
 
@@ -78,10 +83,11 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
         Owner owner = repo.getOwner();
 
         repoName.setText(repo.getName());
-        userName.setText(owner.getLogin());
         description.setText(repo.getDescription());
         lang.setText(repo.getLanguage());
         type.setText(owner.getType());
+        userName.setText(owner.getLogin());
+
 
         Picasso
                 .with(mContext)
@@ -89,7 +95,12 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
                 .fit()
                 .into(repoImage);
 
+        holder.setClickListener(new ItemClickListener() {
+            @Override
+            public void onClick(View view, int position, boolean isLongClick) {
 
+            }
+        });
     }
 
     @Override

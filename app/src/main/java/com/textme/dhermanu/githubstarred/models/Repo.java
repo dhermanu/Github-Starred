@@ -1,13 +1,16 @@
 
 package com.textme.dhermanu.githubstarred.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class Repo {
+public class Repo implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -1459,4 +1462,42 @@ public class Repo {
         this.score = score;
     }
 
+    public static final Creator<Repo> CREATOR = new Creator<Repo>() {
+        @Override
+        public Repo createFromParcel(Parcel parcel) {
+            return new Repo(parcel);
+        }
+
+        @Override
+        public Repo[] newArray(int i) {
+            return new Repo[i];
+        }
+    };
+
+    protected Repo(Parcel in){
+
+        name = in.readString();
+        fullName = in.readString();
+        description = in.readString();
+        language = in.readString();
+        stargazersCount = in.readInt();
+        forksCount = in.readInt();
+        owner = in.readParcelable(Owner.class.getClassLoader());
+
+    }
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(fullName);
+        parcel.writeString(description);
+        parcel.writeString(language);
+        parcel.writeTypedObject(owner, 1);
+        parcel.writeInt(stargazersCount);
+        parcel.writeInt(forksCount);
+    }
 }

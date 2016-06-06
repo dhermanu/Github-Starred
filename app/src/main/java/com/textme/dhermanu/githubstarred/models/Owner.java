@@ -1,12 +1,16 @@
 
 package com.textme.dhermanu.githubstarred.models;
 
-import javax.annotation.Generated;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import javax.annotation.Generated;
+
 @Generated("org.jsonschema2pojo")
-public class Owner {
+public class Owner  implements Parcelable{
 
     @SerializedName("login")
     @Expose
@@ -366,4 +370,25 @@ public class Owner {
         this.siteAdmin = siteAdmin;
     }
 
+    public static final Creator<Owner> CREATOR = new Creator<Owner>() {
+        @Override
+        public Owner createFromParcel(Parcel parcel) {
+            return null;
+        }
+
+        @Override
+        public Owner[] newArray(int i) {
+            return new Owner[0];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+    }
 }

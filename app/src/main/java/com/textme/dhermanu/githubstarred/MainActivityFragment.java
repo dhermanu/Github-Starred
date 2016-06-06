@@ -68,6 +68,11 @@ public class MainActivityFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     private void updateList(String date){
         final String BASE_URL = "https://api.github.com/search/";
         final String QUERY_PARAM = date;
