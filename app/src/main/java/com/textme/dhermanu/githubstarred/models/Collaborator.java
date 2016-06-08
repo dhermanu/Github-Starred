@@ -1,16 +1,13 @@
 
 package com.textme.dhermanu.githubstarred.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class Owner  implements Parcelable{
+public class Collaborator {
 
     @SerializedName("login")
     @Expose
@@ -63,6 +60,9 @@ public class Owner  implements Parcelable{
     @SerializedName("site_admin")
     @Expose
     private Boolean siteAdmin;
+    @SerializedName("contributions")
+    @Expose
+    private Integer contributions;
 
     /**
      * 
@@ -370,33 +370,22 @@ public class Owner  implements Parcelable{
         this.siteAdmin = siteAdmin;
     }
 
-    public static final Creator<Owner> CREATOR = new Creator<Owner>() {
-        @Override
-        public Owner createFromParcel(Parcel parcel) {
-            return new Owner(parcel);
-        }
-
-        @Override
-        public Owner[] newArray(int i) {
-            return new Owner[i];
-        }
-    };
-
-    public Owner(Parcel in) {
-        type = in.readString();
-        login = in.readString();
-        avatarUrl = in.readString();
+    /**
+     * 
+     * @return
+     *     The contributions
+     */
+    public Integer getContributions() {
+        return contributions;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    /**
+     * 
+     * @param contributions
+     *     The contributions
+     */
+    public void setContributions(Integer contributions) {
+        this.contributions = contributions;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(type);
-        parcel.writeString(login);
-        parcel.writeString(avatarUrl);
-    }
 }

@@ -1,6 +1,8 @@
 package com.textme.dhermanu.githubstarred.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.textme.dhermanu.githubstarred.DetailActivity;
 import com.textme.dhermanu.githubstarred.R;
 import com.textme.dhermanu.githubstarred.api.ItemClickListener;
 import com.textme.dhermanu.githubstarred.models.Owner;
@@ -71,7 +74,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(RepoAdapter.ViewHolder holder, int position) {
-        Repo repo = mRepos.get(position);
+        final Repo repo = mRepos.get(position);
         TextView repoName = holder.repoName;
         TextView userName = holder.userName;
         TextView description = holder.description;
@@ -80,7 +83,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
         ImageView repoImage = holder.repoImage;
         //Context context = ViewHolder.getContext();
 
-        Owner owner = repo.getOwner();
+        final Owner owner = repo.getOwner();
 
         repoName.setText(repo.getName());
         description.setText(repo.getDescription());
@@ -98,7 +101,13 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
-
+                Intent intent = new Intent(mContext, DetailActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString(mContext.getResources().getString(R.string.EXTRA_DATA), repo.getName());
+                extras.putString(mContext.getResources().getString(R.string.EXTRA_OWNER), owner.getLogin());
+                extras.putString(mContext.getResources().getString(R.string.EXTRA_AVATAR), owner.getAvatarUrl());
+                intent.putExtras(extras);
+                mContext.startActivity(intent);
             }
         });
     }

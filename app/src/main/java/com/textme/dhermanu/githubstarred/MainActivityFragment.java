@@ -1,5 +1,8 @@
 package com.textme.dhermanu.githubstarred;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +11,7 @@ import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,6 +39,9 @@ public class MainActivityFragment extends Fragment {
     private ArrayList<Repo> repoListsaved = null;
     private RecyclerView rvRepos;
     private RepoAdapter repoAdapter;
+    private String SAVEDINSTANCE_REPO = "save_repo";
+    public String EXTRA_DATA = "SEND_REPO_INFO";
+    public String queryFormat;
 
     public MainActivityFragment() {
     }
@@ -44,33 +51,40 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Time dayTime = new Time();
-        dayTime.setToNow();
-
-        // we start at the day returned by local time. Otherwise this is a mess.
-        int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
-        dayTime = new Time();
-
-        long dateTime;
-
-        // Cheating to convert this to UTC time, which is what we want anyhow
-        dateTime = dayTime.setJulianDay(julianStartDay-7);
-        String day = getReadableDateString(dateTime);
-        String queryFormat = "created:" + day;
+        queryFormat = getCurrentDate();
 
         rvRepos = (RecyclerView) rootview.findViewById(R.id.recycle_repo_list);
         rvRepos.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateList(queryFormat);
+        if(!checkConnection())
+            Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
 
+        else{
+            if(savedInstanceState != null){
+                repoListsaved = savedInstanceState.getParcelableArrayList(SAVEDINSTANCE_REPO);
+                if(repoListsaved != null){
+                    repoAdapter = new RepoAdapter(repoListsaved, getContext());
+                    rvRepos.setAdapter(repoAdapter);
+                }
 
+                else if(!checkConnection())
+                    Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
+
+                else if(checkConnection())
+                    updateList(queryFormat);
+            }
+            else
+                updateList(queryFormat);
+        }
         return rootview;
-
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if(repoListsaved != null){
+            outState.putParcelableArrayList(SAVEDINSTANCE_REPO, repoListsaved);
+        }
     }
 
     private void updateList(String date){
@@ -78,6 +92,8 @@ public class MainActivityFragment extends Fragment {
         final String QUERY_PARAM = date;
         final String SORT_PARAM = "stars";
         final String ORDER_PARAM = "desc";
+
+        //Toast.makeText(getContext(), "NETWORK OPERATION",  Toast.LENGTH_SHORT).show();
 
         Gson gson =  new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
@@ -115,4 +131,31 @@ public class MainActivityFragment extends Fragment {
         return shortenedDateFormat.format(time);
     }
 
+    private String getCurrentDate(){
+        Time dayTime = new Time();
+        dayTime.setToNow();
+
+        // we start at the day returned by local time. Otherwise this is a mess.
+        int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
+        dayTime = new Time();
+        long dateTime;
+
+        // Cheating to convert this to UTC time, which is what we want anyhow
+        dateTime = dayTime.setJulianDay(julianStartDay-7);
+        String day = getReadableDateString(dateTime);
+        String dateFormat = "created:" + day;
+
+        return dateFormat;
+    }
+
+    public boolean checkConnection(){
+        ConnectivityManager cm =
+                (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
+    }
 }

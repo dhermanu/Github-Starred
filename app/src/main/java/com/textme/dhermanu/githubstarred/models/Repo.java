@@ -1475,14 +1475,14 @@ public class Repo implements Parcelable {
     };
 
     protected Repo(Parcel in){
-
         name = in.readString();
         fullName = in.readString();
         description = in.readString();
         language = in.readString();
         stargazersCount = in.readInt();
         forksCount = in.readInt();
-        owner = in.readParcelable(Owner.class.getClassLoader());
+        owner = (Owner) in.readParcelable(Owner.class.getClassLoader());
+        collaboratorsUrl = in.readString();
 
     }
     @Override
@@ -1496,8 +1496,9 @@ public class Repo implements Parcelable {
         parcel.writeString(fullName);
         parcel.writeString(description);
         parcel.writeString(language);
-        parcel.writeTypedObject(owner, 1);
+        parcel.writeParcelable(owner, i);
         parcel.writeInt(stargazersCount);
         parcel.writeInt(forksCount);
+        parcel.writeString(collaboratorsUrl);
     }
 }
