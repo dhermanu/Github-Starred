@@ -60,10 +60,11 @@ public class ContributorAdapter extends RecyclerView.Adapter<ContributorAdapter.
         TextView profileLink = holder.profileLink;
         ImageView contributorImage = holder.contributorImage;
         TextView commits = holder.commits;
+        String numberCommits = Integer.toString(contributor.getContributions()) + " commit(s)";
 
         userName.setText(contributor.getLogin());
         profileLink.setText(contributor.getHtmlUrl());
-         commits.setText(Integer.toString(contributor.getContributions()) + " commit(s)");
+        commits.setText(numberCommits);
 
         Picasso
                 .with(mContext)

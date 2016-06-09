@@ -1,4 +1,4 @@
-package com.textme.dhermanu.githubstarred;
+package com.textme.dhermanu.githubstarred.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
+import com.textme.dhermanu.githubstarred.activities.MainActivity;
+import com.textme.dhermanu.githubstarred.R;
 import com.textme.dhermanu.githubstarred.adapters.ContributorAdapter;
 import com.textme.dhermanu.githubstarred.api.GithubAPI;
 import com.textme.dhermanu.githubstarred.models.Contributor;
@@ -43,6 +46,7 @@ public class DetailActivityFragment extends Fragment {
     private ImageView userImage;
     private RecyclerView rvContributor;
     private String SAVEDINSTANCE_CONTRIBUTOR = "save_collabs";
+    public String NO_INTERNET = "No Internet Connection";
 
     private ArrayList<Contributor> ContributorListsaved = null;
 
@@ -75,6 +79,7 @@ public class DetailActivityFragment extends Fragment {
         String name = args.getString(MainActivity.EXTRA_DATA);
         String ownerLogin = args.getString(MainActivity.EXTRA_OWNER);
         String avatarUrl = args.getString(MainActivity.EXTRA_AVATAR);
+        String title = name + " Contributors";
 
         userImage = (ImageView) rootview.findViewById(R.id.imageBanner);
         rvContributor = (RecyclerView) rootview.findViewById(R.id.recycle_collab_list);
@@ -83,16 +88,10 @@ public class DetailActivityFragment extends Fragment {
         CollapsingToolbarLayout collapsingToolbarLayout
                 = (CollapsingToolbarLayout) rootview.findViewById(R.id.collapsingtoolbar);
 
-        final CollapsingToolbarLayout templayout = collapsingToolbarLayout;
-
-        //set layout
-        collapsingToolbarLayout = templayout;
-        collapsingToolbarLayout.setTitle(name + " Contributors");
-
-        //https://api.github.com/repos/googlecreativelab/anypixel/contributors
+        collapsingToolbarLayout.setTitle(title);
 
         if(!checkConnection())
-            Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), NO_INTERNET ,Toast.LENGTH_SHORT).show();
 
         else{
             if(savedInstanceState != null){
@@ -103,7 +102,7 @@ public class DetailActivityFragment extends Fragment {
                 }
 
                 else if(!checkConnection())
-                    Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), NO_INTERNET,Toast.LENGTH_SHORT).show();
 
                 else if(checkConnection())
                     updateContributorList(ownerLogin, name);
@@ -123,9 +122,12 @@ public class DetailActivityFragment extends Fragment {
 
     private void updateContributorList(String login, String name){
 
+        Log.v("HELO", login);
+        Log.v("HELO", name);
+
         final String BASE_URL = "https://api.github.com/repos/";
 
-        Toast.makeText(getContext(), "NETWORK OPERATION",  Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "NETWORK OPERTION",  Toast.LENGTH_SHORT).show();
 
         Gson gson =  new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
@@ -142,8 +144,8 @@ public class DetailActivityFragment extends Fragment {
                 contributorAdapter = new ContributorAdapter(contributors, getContext());
                 rvContributor.setAdapter(contributorAdapter);
 
-                for(Contributor collab : contributors){
-                    ContributorListsaved.add(collab);
+                for(Contributor contributor : contributors){
+                    ContributorListsaved.add(contributor);
                 }
 
             }

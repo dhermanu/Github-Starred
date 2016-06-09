@@ -7,7 +7,15 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="layout_margin">10dp</dimen>
+    <dimen name="layout_top_margin_card">5dp</dimen>
+    <dimen name="layout_top_margin_commit">30dp</dimen>
+    <dimen name="layout_top_margin_bar">60dp</dimen>
+
     <dimen name="image_repo_height">90dp</dimen>
     <dimen name="image_repo_width">90dp</dimen>
+    <dimen name="image_banner_height">300dp</dimen>
+
+    <dimen name="desciption_size">13sp</dimen>
+    <dimen name="desciption_size_port">9sp</dimen>
 
 </resources>

@@ -1,7 +1,9 @@
-package com.textme.dhermanu.githubstarred;
+package com.textme.dhermanu.githubstarred.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.textme.dhermanu.githubstarred.R;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -11,5 +13,4 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
     }
-
 }

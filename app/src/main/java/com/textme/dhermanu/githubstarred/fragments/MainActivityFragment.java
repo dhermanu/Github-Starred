@@ -1,4 +1,4 @@
-package com.textme.dhermanu.githubstarred;
+package com.textme.dhermanu.githubstarred.fragments;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.textme.dhermanu.githubstarred.R;
 import com.textme.dhermanu.githubstarred.adapters.RepoAdapter;
 import com.textme.dhermanu.githubstarred.api.GithubAPI;
 import com.textme.dhermanu.githubstarred.models.Repo;
@@ -40,7 +41,7 @@ public class MainActivityFragment extends Fragment {
     private RecyclerView rvRepos;
     private RepoAdapter repoAdapter;
     private String SAVEDINSTANCE_REPO = "save_repo";
-    public String EXTRA_DATA = "SEND_REPO_INFO";
+    public String NO_INTERNET = "No Internet Connection";
     public String queryFormat;
 
     @Override
@@ -59,7 +60,7 @@ public class MainActivityFragment extends Fragment {
                 rvRepos.setAdapter(repoAdapter);
             }
             else{
-                Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), NO_INTERNET,Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -72,7 +73,7 @@ public class MainActivityFragment extends Fragment {
                 }
 
                 else if(!checkConnection())
-                    Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), NO_INTERNET,Toast.LENGTH_SHORT).show();
 
                 else if(checkConnection())
                     updateList(queryFormat);
@@ -80,6 +81,8 @@ public class MainActivityFragment extends Fragment {
             else
                 updateList(queryFormat);
         }
+
+
         return rootview;
     }
 
@@ -97,7 +100,7 @@ public class MainActivityFragment extends Fragment {
         final String SORT_PARAM = "stars";
         final String ORDER_PARAM = "desc";
 
-        Toast.makeText(getContext(), "NETWORK OPERATION",  Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "NETWORK OPERTION",  Toast.LENGTH_SHORT).show();
 
         Gson gson =  new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
@@ -125,7 +128,6 @@ public class MainActivityFragment extends Fragment {
 
             }
         });
-
     }
 
     private String getReadableDateString(long time){

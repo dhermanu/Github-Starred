@@ -1,14 +1,15 @@
-package com.textme.dhermanu.githubstarred;
+package com.textme.dhermanu.githubstarred.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.textme.dhermanu.githubstarred.R;
 import com.textme.dhermanu.githubstarred.callbacks.CallbackTablet;
+import com.textme.dhermanu.githubstarred.fragments.DetailActivityFragment;
 import com.textme.dhermanu.githubstarred.models.Owner;
 import com.textme.dhermanu.githubstarred.models.Repo;
 
@@ -70,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements CallbackTablet{
             extras.putString(EXTRA_DATA, repo.getName());
             extras.putString(EXTRA_OWNER, owner.getLogin());
             extras.putString(EXTRA_AVATAR, owner.getAvatarUrl());
-
-            Log.v("Movie Title is", repo.getName());
 
             DetailActivityFragment fragment = new DetailActivityFragment();
             fragment.setArguments(extras);

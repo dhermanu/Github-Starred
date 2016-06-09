@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="@dimen/layout_top_margin_card"
     android:minHeight="?android:attr/listPreferredItemHeight">
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/layout_margin"
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:textColor="@color/black"
@@ -42,10 +42,10 @@
                 android:gravity="center"/>
 
             <TextView
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/layout_top_margin_commit"
                 android:id="@+id/commits"
                 android:gravity="end"
-                android:textSize="13sp"
+                android:textSize="@dimen/desciption_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

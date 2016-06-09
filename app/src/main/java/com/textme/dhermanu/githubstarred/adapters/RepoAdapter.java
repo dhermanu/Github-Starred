@@ -76,19 +76,23 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
         TextView lang = holder.lang;
         TextView stargazers = holder.stargazers;
         ImageView repoImage = holder.repoImage;
-
         final Owner owner = repo.getOwner();
+
+        String stargazerCount = Integer.toString(repo.getStargazersCount());
 
         repoName.setText(repo.getFullName());
         description.setText(repo.getDescription());
-        stargazers.setText(Integer.toString(repo.getStargazersCount()));
+        stargazers.setText(stargazerCount);
 
         if(repo.getLanguage() != null){
-            lang.setText("Language: " + repo.getLanguage());
+            lang.setText(repo.getLanguage());
         }
 
-        else
-            lang.setText("Language: " + "Not specified");
+        else{
+            String langGet = "Not specified";
+            lang.setText(langGet);
+        }
+
 
         Picasso
                 .with(mContext)

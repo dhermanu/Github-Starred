@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.textme.dhermanu.githubstarred.MainActivity">
+    tools:context=".activities.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="@dimen/layout_top_margin_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -44,6 +44,5 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>
