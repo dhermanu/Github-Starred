@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
-import com.textme.dhermanu.githubstarred.adapters.CollabAdapter;
+import com.textme.dhermanu.githubstarred.adapters.ContributorAdapter;
 import com.textme.dhermanu.githubstarred.api.GithubAPI;
 import com.textme.dhermanu.githubstarred.models.Contributor;
 
@@ -39,7 +39,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DetailActivityFragment extends Fragment {
 
     private GithubAPI githubAPI;
-    private CollabAdapter contributorAdapter;
+    private ContributorAdapter contributorAdapter;
     private ImageView userImage;
     private RecyclerView rvContributor;
     private String SAVEDINSTANCE_CONTRIBUTOR = "save_collabs";
@@ -55,17 +55,26 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootview = inflater.inflate(R.layout.fragment_detail, container, false);
+
         Intent intent  = getActivity().getIntent();
-        Bundle args = intent.getExtras();
+        Bundle args;
 
-        Toolbar toolbar = (Toolbar) rootview.findViewById(R.id.toolbar);
+        // checks for tablet
+        if(rootview.findViewById(R.id.tablet_layout) != null){
+            args = intent.getExtras();
+            Toolbar toolbar = (Toolbar) rootview.findViewById(R.id.toolbar);
 
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-        String name = args.getString(getResources().getString(R.string.EXTRA_DATA));
-        String ownerLogin = args.getString(getResources().getString(R.string.EXTRA_OWNER));
-        String avatarUrl = args.getString(getResources().getString(R.string.EXTRA_AVATAR));
+        else{
+            args = getArguments();
+        }
+
+        String name = args.getString(MainActivity.EXTRA_DATA);
+        String ownerLogin = args.getString(MainActivity.EXTRA_OWNER);
+        String avatarUrl = args.getString(MainActivity.EXTRA_AVATAR);
 
         userImage = (ImageView) rootview.findViewById(R.id.imageBanner);
         rvContributor = (RecyclerView) rootview.findViewById(R.id.recycle_collab_list);
@@ -89,7 +98,7 @@ public class DetailActivityFragment extends Fragment {
             if(savedInstanceState != null){
                 ContributorListsaved = savedInstanceState.getParcelableArrayList(SAVEDINSTANCE_CONTRIBUTOR);
                 if(ContributorListsaved != null){
-                    contributorAdapter = new CollabAdapter(ContributorListsaved, getContext());
+                    contributorAdapter = new ContributorAdapter(ContributorListsaved, getContext());
                     rvContributor.setAdapter(contributorAdapter);
                 }
 
@@ -102,8 +111,6 @@ public class DetailActivityFragment extends Fragment {
             else
                 updateContributorList(ownerLogin, name);
         }
-
-        updateContributorList(ownerLogin, name);
 
         Picasso
                 .with(getContext())
@@ -132,7 +139,7 @@ public class DetailActivityFragment extends Fragment {
             public void onResponse(Call<List<Contributor>> call, Response<List<Contributor>> response) {
                 List<Contributor> contributors = response.body();
                 ContributorListsaved = new ArrayList<>();
-                contributorAdapter = new CollabAdapter(contributors, getContext());
+                contributorAdapter = new ContributorAdapter(contributors, getContext());
                 rvContributor.setAdapter(contributorAdapter);
 
                 for(Contributor collab : contributors){

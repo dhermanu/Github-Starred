@@ -1,4 +1,4 @@
-package com.textme.dhermanu.githubstarred.api;
+package com.textme.dhermanu.githubstarred.callbacks;
 
 import android.view.View;
 

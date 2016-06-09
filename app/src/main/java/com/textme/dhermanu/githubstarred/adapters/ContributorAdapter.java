@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by dhermanu on 6/6/16.
  */
-public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.ViewHolder> {
+public class ContributorAdapter extends RecyclerView.Adapter<ContributorAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -35,20 +35,20 @@ public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.ViewHolder
     public List<Contributor> mContributors;
     public Context mContext;
 
-    public CollabAdapter(List<Contributor> contributors, Context context){
+    public ContributorAdapter(List<Contributor> contributors, Context context){
         mContributors = contributors;
         mContext = context;
     }
 
     @Override
-    public CollabAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ContributorAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View collabView = inflater.inflate(R.layout.list_item_contributor, parent , false);
+        View contributorView = inflater.inflate(R.layout.list_item_contributor, parent , false);
 
         //return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(collabView);
+        ViewHolder viewHolder = new ViewHolder(contributorView);
 
         return viewHolder;
     }

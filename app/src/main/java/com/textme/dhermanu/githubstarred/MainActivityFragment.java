@@ -43,9 +43,6 @@ public class MainActivityFragment extends Fragment {
     public String EXTRA_DATA = "SEND_REPO_INFO";
     public String queryFormat;
 
-    public MainActivityFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

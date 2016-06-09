@@ -1,8 +1,6 @@
 package com.textme.dhermanu.githubstarred.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.textme.dhermanu.githubstarred.DetailActivity;
 import com.textme.dhermanu.githubstarred.R;
-import com.textme.dhermanu.githubstarred.api.ItemClickListener;
+import com.textme.dhermanu.githubstarred.callbacks.CallbackTablet;
+import com.textme.dhermanu.githubstarred.callbacks.ItemClickListener;
 import com.textme.dhermanu.githubstarred.models.Owner;
 import com.textme.dhermanu.githubstarred.models.Repo;
 
@@ -101,18 +99,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
-                Intent intent = new Intent(mContext, DetailActivity.class);
-                Bundle extras = new Bundle();
-
-                extras.putString
-                        (mContext.getResources().getString(R.string.EXTRA_DATA), repo.getName());
-                extras.putString
-                        (mContext.getResources().getString(R.string.EXTRA_OWNER), owner.getLogin());
-                extras.putString
-                        (mContext.getResources().getString(R.string.EXTRA_AVATAR), owner.getAvatarUrl());
-
-                intent.putExtras(extras);
-                mContext.startActivity(intent);
+                ((CallbackTablet)mContext).onItemSelected(repo);
             }
         });
     }
