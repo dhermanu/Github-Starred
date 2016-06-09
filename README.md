@@ -12,6 +12,6 @@ This app will display the most starred repositories that was created last week.
 <img src="http://i.imgur.com/baiVwer.png" width="400">
 
 # Libraries
-[Picasso](http://square.github.io/picasso/)
+[Picasso](http://square.github.io/picasso/) <br/>
 [Retrofit](http://square.github.io/retrofit/)
 
