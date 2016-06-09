@@ -56,8 +56,15 @@ public class MainActivityFragment extends Fragment {
         rvRepos = (RecyclerView) rootview.findViewById(R.id.recycle_repo_list);
         rvRepos.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        if(!checkConnection())
-            Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
+        if(!checkConnection()){
+            if(repoListsaved != null){
+                repoAdapter = new RepoAdapter(repoListsaved, getContext());
+                rvRepos.setAdapter(repoAdapter);
+            }
+            else{
+                Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
+            }
+        }
 
         else{
             if(savedInstanceState != null){
@@ -93,7 +100,7 @@ public class MainActivityFragment extends Fragment {
         final String SORT_PARAM = "stars";
         final String ORDER_PARAM = "desc";
 
-        //Toast.makeText(getContext(), "NETWORK OPERATION",  Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "NETWORK OPERATION",  Toast.LENGTH_SHORT).show();
 
         Gson gson =  new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)

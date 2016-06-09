@@ -26,17 +26,15 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public TextView repoName, userName, description, lang, type;
+        public TextView repoName, description, lang, stargazers;
         public ImageView repoImage;
         private ItemClickListener itemClickListener;
         public ViewHolder(View itemView) {
             super(itemView);
             repoName = (TextView) itemView.findViewById(R.id.repo_name);
-            userName = (TextView) itemView.findViewById(R.id.user_name);
             description = (TextView) itemView.findViewById(R.id.description);
             lang = (TextView) itemView.findViewById(R.id.language);
-            type = (TextView) itemView.findViewById(R.id.type);
-
+            stargazers = (TextView) itemView.findViewById(R.id.starred);
             repoImage = (ImageView) itemView.findViewById(R.id.repoImage);
             itemView.setOnClickListener(this);
         }
@@ -76,21 +74,23 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
     public void onBindViewHolder(RepoAdapter.ViewHolder holder, int position) {
         final Repo repo = mRepos.get(position);
         TextView repoName = holder.repoName;
-        TextView userName = holder.userName;
         TextView description = holder.description;
         TextView lang = holder.lang;
-        TextView type = holder.type;
+        TextView stargazers = holder.stargazers;
         ImageView repoImage = holder.repoImage;
-        //Context context = ViewHolder.getContext();
 
         final Owner owner = repo.getOwner();
 
-        repoName.setText(repo.getName());
+        repoName.setText(repo.getFullName());
         description.setText(repo.getDescription());
-        lang.setText(repo.getLanguage());
-        type.setText(owner.getType());
-        userName.setText(owner.getLogin());
+        stargazers.setText(Integer.toString(repo.getStargazersCount()));
 
+        if(repo.getLanguage() != null){
+            lang.setText("Language: " + repo.getLanguage());
+        }
+
+        else
+            lang.setText("Language: " + "Not specified");
 
         Picasso
                 .with(mContext)
@@ -103,9 +103,14 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
             public void onClick(View view, int position, boolean isLongClick) {
                 Intent intent = new Intent(mContext, DetailActivity.class);
                 Bundle extras = new Bundle();
-                extras.putString(mContext.getResources().getString(R.string.EXTRA_DATA), repo.getName());
-                extras.putString(mContext.getResources().getString(R.string.EXTRA_OWNER), owner.getLogin());
-                extras.putString(mContext.getResources().getString(R.string.EXTRA_AVATAR), owner.getAvatarUrl());
+
+                extras.putString
+                        (mContext.getResources().getString(R.string.EXTRA_DATA), repo.getName());
+                extras.putString
+                        (mContext.getResources().getString(R.string.EXTRA_OWNER), owner.getLogin());
+                extras.putString
+                        (mContext.getResources().getString(R.string.EXTRA_AVATAR), owner.getAvatarUrl());
+
                 intent.putExtras(extras);
                 mContext.startActivity(intent);
             }

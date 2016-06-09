@@ -1,6 +1,6 @@
 package com.textme.dhermanu.githubstarred.api;
 
-import com.textme.dhermanu.githubstarred.models.Collaborator;
+import com.textme.dhermanu.githubstarred.models.Contributor;
 import com.textme.dhermanu.githubstarred.models.RepoList;
 
 import java.util.List;
@@ -19,6 +19,6 @@ public interface GithubAPI {
             (@Query("q") String query, @Query("sort") String sort, @Query("order") String order);
 
     @GET("{login}/{name}/contributors")
-    Call<List<Collaborator>> getCollab(@Path("login") String login, @Path("name") String name);
+    Call<List<Contributor>> getCollab(@Path("login") String login, @Path("name") String name);
 
 }

@@ -1,6 +1,9 @@
 package com.textme.dhermanu.githubstarred;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -8,19 +11,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 import com.textme.dhermanu.githubstarred.adapters.CollabAdapter;
 import com.textme.dhermanu.githubstarred.api.GithubAPI;
-import com.textme.dhermanu.githubstarred.models.Collaborator;
+import com.textme.dhermanu.githubstarred.models.Contributor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,9 +39,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DetailActivityFragment extends Fragment {
 
     private GithubAPI githubAPI;
-    private CollabAdapter collabAdapter;
+    private CollabAdapter contributorAdapter;
     private ImageView userImage;
-    private RecyclerView rvCollab;
+    private RecyclerView rvContributor;
+    private String SAVEDINSTANCE_CONTRIBUTOR = "save_collabs";
+
+    private ArrayList<Contributor> ContributorListsaved = null;
+
 
     public DetailActivityFragment() {
     }
@@ -60,8 +68,8 @@ public class DetailActivityFragment extends Fragment {
         String avatarUrl = args.getString(getResources().getString(R.string.EXTRA_AVATAR));
 
         userImage = (ImageView) rootview.findViewById(R.id.imageBanner);
-        rvCollab = (RecyclerView) rootview.findViewById(R.id.recycle_collab_list);
-        rvCollab.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvContributor = (RecyclerView) rootview.findViewById(R.id.recycle_collab_list);
+        rvContributor.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         CollapsingToolbarLayout collapsingToolbarLayout
                 = (CollapsingToolbarLayout) rootview.findViewById(R.id.collapsingtoolbar);
@@ -70,13 +78,32 @@ public class DetailActivityFragment extends Fragment {
 
         //set layout
         collapsingToolbarLayout = templayout;
-        collapsingToolbarLayout.setTitle("Banner title");
+        collapsingToolbarLayout.setTitle(name + " Contributors");
 
         //https://api.github.com/repos/googlecreativelab/anypixel/contributors
 
-        Log.v("HELO", ownerLogin);
+        if(!checkConnection())
+            Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
 
-        updateCollabList(ownerLogin, name);
+        else{
+            if(savedInstanceState != null){
+                ContributorListsaved = savedInstanceState.getParcelableArrayList(SAVEDINSTANCE_CONTRIBUTOR);
+                if(ContributorListsaved != null){
+                    contributorAdapter = new CollabAdapter(ContributorListsaved, getContext());
+                    rvContributor.setAdapter(contributorAdapter);
+                }
+
+                else if(!checkConnection())
+                    Toast.makeText(getContext(), "No Internet Connection",Toast.LENGTH_SHORT).show();
+
+                else if(checkConnection())
+                    updateContributorList(ownerLogin, name);
+            }
+            else
+                updateContributorList(ownerLogin, name);
+        }
+
+        updateContributorList(ownerLogin, name);
 
         Picasso
                 .with(getContext())
@@ -87,9 +114,11 @@ public class DetailActivityFragment extends Fragment {
         return rootview;
     }
 
-    private void updateCollabList(String login, String name){
+    private void updateContributorList(String login, String name){
 
         final String BASE_URL = "https://api.github.com/repos/";
+
+        Toast.makeText(getContext(), "NETWORK OPERATION",  Toast.LENGTH_SHORT).show();
 
         Gson gson =  new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
@@ -97,19 +126,44 @@ public class DetailActivityFragment extends Fragment {
                 .build();
 
         githubAPI = retrofit.create(GithubAPI.class);
-        Call<List<Collaborator>> collaboratorCall = githubAPI.getCollab(login, name);
-        collaboratorCall.enqueue(new Callback<List<Collaborator>>() {
+        Call<List<Contributor>> collaboratorCall = githubAPI.getCollab(login, name);
+        collaboratorCall.enqueue(new Callback<List<Contributor>>() {
             @Override
-            public void onResponse(Call<List<Collaborator>> call, Response<List<Collaborator>> response) {
-                List<Collaborator> collaborators = response.body();
-                collabAdapter = new CollabAdapter(collaborators, getContext());
-                rvCollab.setAdapter(collabAdapter);
+            public void onResponse(Call<List<Contributor>> call, Response<List<Contributor>> response) {
+                List<Contributor> contributors = response.body();
+                ContributorListsaved = new ArrayList<>();
+                contributorAdapter = new CollabAdapter(contributors, getContext());
+                rvContributor.setAdapter(contributorAdapter);
+
+                for(Contributor collab : contributors){
+                    ContributorListsaved.add(collab);
+                }
+
             }
 
             @Override
-            public void onFailure(Call<List<Collaborator>> call, Throwable t) {
+            public void onFailure(Call<List<Contributor>> call, Throwable t) {
 
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(ContributorListsaved != null){
+            outState.putParcelableArrayList(SAVEDINSTANCE_CONTRIBUTOR, ContributorListsaved);
+        }
+    }
+
+    public boolean checkConnection(){
+        ConnectivityManager cm =
+                (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
     }
 }

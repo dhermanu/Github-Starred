@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.textme.dhermanu.githubstarred.R;
-import com.textme.dhermanu.githubstarred.models.Collaborator;
+import com.textme.dhermanu.githubstarred.models.Contributor;
 
 import java.util.List;
 
@@ -21,21 +21,22 @@ public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView userName, profileLink;
-        public ImageView collabName;
+        public TextView userName, profileLink, commits;
+        public ImageView contributorImage;
         public ViewHolder(View itemView) {
             super(itemView);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             profileLink = (TextView) itemView.findViewById(R.id.profile_link);
-            collabName = (ImageView) itemView.findViewById(R.id.collab_name);
+            commits = (TextView) itemView.findViewById(R.id.commits);
+            contributorImage = (ImageView) itemView.findViewById(R.id.contributor_image);
         }
     }
 
-    public List<Collaborator> mCollabs;
+    public List<Contributor> mContributors;
     public Context mContext;
 
-    public CollabAdapter(List<Collaborator> collaborators, Context context){
-        mCollabs = collaborators;
+    public CollabAdapter(List<Contributor> contributors, Context context){
+        mContributors = contributors;
         mContext = context;
     }
 
@@ -44,7 +45,7 @@ public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.ViewHolder
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View collabView = inflater.inflate(R.layout.list_item_collab, parent , false);
+        View collabView = inflater.inflate(R.layout.list_item_contributor, parent , false);
 
         //return a new holder instance
         ViewHolder viewHolder = new ViewHolder(collabView);
@@ -54,24 +55,27 @@ public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Collaborator collaborator = mCollabs.get(position);
+        Contributor contributor = mContributors.get(position);
         TextView userName = holder.userName;
         TextView profileLink = holder.profileLink;
-        ImageView collabImage = holder.collabName;
+        ImageView contributorImage = holder.contributorImage;
+        TextView commits = holder.commits;
 
-        userName.setText(collaborator.getLogin());
-        profileLink.setText(collaborator.getHtmlUrl());
+        userName.setText(contributor.getLogin());
+        profileLink.setText(contributor.getHtmlUrl());
+         commits.setText(Integer.toString(contributor.getContributions()) + " commit(s)");
+
         Picasso
                 .with(mContext)
-                .load(collaborator.getAvatarUrl())
+                .load(contributor.getAvatarUrl())
                 .fit()
-                .into(collabImage);
+                .into(contributorImage);
     }
 
     @Override
     public int getItemCount() {
-        if(mCollabs != null)
-            return mCollabs.size();
+        if(mContributors != null)
+            return mContributors.size();
 
         return 0;
     }

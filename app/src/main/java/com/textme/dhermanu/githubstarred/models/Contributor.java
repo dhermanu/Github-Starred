@@ -1,13 +1,16 @@
 
 package com.textme.dhermanu.githubstarred.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class Collaborator {
+public class Contributor implements Parcelable {
 
     @SerializedName("login")
     @Expose
@@ -388,4 +391,34 @@ public class Collaborator {
         this.contributions = contributions;
     }
 
+    public static final Creator<Contributor> CREATOR = new Creator<Contributor>() {
+        @Override
+        public Contributor createFromParcel(Parcel parcel) {
+            return new Contributor(parcel);
+        }
+
+        @Override
+        public Contributor[] newArray(int i) {
+            return new Contributor[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(login);
+        parcel.writeString(avatarUrl);
+        parcel.writeString(htmlUrl);
+
+    }
+
+    public Contributor(Parcel in) {
+        htmlUrl = in.readString();
+        login = in.readString();
+        avatarUrl = in.readString();
+    }
 }
