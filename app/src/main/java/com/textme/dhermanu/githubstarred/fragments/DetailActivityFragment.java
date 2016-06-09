@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +20,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
-import com.textme.dhermanu.githubstarred.activities.MainActivity;
 import com.textme.dhermanu.githubstarred.R;
+import com.textme.dhermanu.githubstarred.activities.MainActivity;
 import com.textme.dhermanu.githubstarred.adapters.ContributorAdapter;
 import com.textme.dhermanu.githubstarred.api.GithubAPI;
 import com.textme.dhermanu.githubstarred.models.Contributor;
@@ -122,12 +121,7 @@ public class DetailActivityFragment extends Fragment {
 
     private void updateContributorList(String login, String name){
 
-        Log.v("HELO", login);
-        Log.v("HELO", name);
-
         final String BASE_URL = "https://api.github.com/repos/";
-
-        Toast.makeText(getContext(), "NETWORK OPERTION",  Toast.LENGTH_SHORT).show();
 
         Gson gson =  new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)

@@ -100,8 +100,6 @@ public class MainActivityFragment extends Fragment {
         final String SORT_PARAM = "stars";
         final String ORDER_PARAM = "desc";
 
-        Toast.makeText(getContext(), "NETWORK OPERTION",  Toast.LENGTH_SHORT).show();
-
         Gson gson =  new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
