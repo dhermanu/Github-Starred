@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_unit_options">
+        <item>@string/pref_ascending</item>
+        <item>@string/pref_desc</item>
+    </string-array>
+
+    <string-array name="pref_unit_value">
+        <item>@string/pref_ascending_value</item>
+        <item>@string/pref_desc_value</item>
+    </string-array>
+
+</resources>

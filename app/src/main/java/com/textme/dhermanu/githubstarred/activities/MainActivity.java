@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.textme.dhermanu.githubstarred.R;
 import com.textme.dhermanu.githubstarred.callbacks.CallbackTablet;
 import com.textme.dhermanu.githubstarred.fragments.DetailActivityFragment;
+import com.textme.dhermanu.githubstarred.fragments.SettingsActivity;
 import com.textme.dhermanu.githubstarred.models.Owner;
 import com.textme.dhermanu.githubstarred.models.Repo;
 
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements CallbackTablet{
             "com.example.dhermanu.popularmoviesi.EXTRA_OWNER";
     public final static String EXTRA_AVATAR =
             "com.example.dhermanu.popularmoviesi.EXTRA_AVATAR";
+    public final static String EXTRA_ID =
+            "com.example.dhermanu.popularmoviesi.EXTRA_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements CallbackTablet{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements CallbackTablet{
             extras.putString(EXTRA_DATA, repo.getName());
             extras.putString(EXTRA_OWNER, owner.getLogin());
             extras.putString(EXTRA_AVATAR, owner.getAvatarUrl());
+            extras.putInt(EXTRA_ID, repo.getId());
             intent.putExtras(extras);
             startActivity(intent);
         }

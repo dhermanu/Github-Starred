@@ -39,13 +39,24 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="fill_vertical"
         android:id="@+id/tablet_layout"
         android:layout_margin="@dimen/layout_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:id="@+id/switchStatus"
+            android:text="Favorited"/>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycle_collab_list"

@@ -2,19 +2,27 @@ package com.textme.dhermanu.githubstarred.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -43,9 +51,13 @@ public class DetailActivityFragment extends Fragment {
     private GithubAPI githubAPI;
     private ContributorAdapter contributorAdapter;
     private ImageView userImage;
+    private Switch aSwitch;
     private RecyclerView rvContributor;
+    public  boolean mFav = false;
+    public final static String FAV_PREF = "Favorite_repo";
     private String SAVEDINSTANCE_CONTRIBUTOR = "save_collabs";
     public String NO_INTERNET = "No Internet Connection";
+    public ShareActionProvider shareActionProvider;
 
     private ArrayList<Contributor> ContributorListsaved = null;
 
@@ -78,6 +90,35 @@ public class DetailActivityFragment extends Fragment {
         String name = args.getString(MainActivity.EXTRA_DATA);
         String ownerLogin = args.getString(MainActivity.EXTRA_OWNER);
         String avatarUrl = args.getString(MainActivity.EXTRA_AVATAR);
+        final Integer repoID = args.getInt(MainActivity.EXTRA_ID);
+
+        aSwitch = (Switch) rootview.findViewById(R.id.switchStatus);
+
+        SharedPreferences sharedPreferences
+                = getActivity().getSharedPreferences(FAV_PREF, Context.MODE_PRIVATE);
+
+        if(sharedPreferences.contains(repoID.toString())){
+            aSwitch.setChecked(true);
+        }
+
+        else
+           aSwitch.setChecked(false);
+
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if(b){
+                    addFavorites(repoID);
+                }
+
+                else
+                    removeFavorites(repoID);
+            }
+
+        });
+
+
         String title = name + " Contributors";
 
         userImage = (ImageView) rootview.findViewById(R.id.imageBanner);
@@ -110,11 +151,16 @@ public class DetailActivityFragment extends Fragment {
                 updateContributorList(ownerLogin, name);
         }
 
+
         Picasso
                 .with(getContext())
                 .load(avatarUrl)
                 .fit()
                 .into(userImage);
+
+
+
+
 
         return rootview;
     }
@@ -152,6 +198,15 @@ public class DetailActivityFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_share, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        shareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        shareActionProvider.setShareIntent(createShareIntent());
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if(ContributorListsaved != null){
@@ -168,5 +223,31 @@ public class DetailActivityFragment extends Fragment {
                 activeNetwork.isConnectedOrConnecting();
 
         return isConnected;
+    }
+
+    private Intent createShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT,  "SHARE!");
+        return shareIntent;
+    }
+
+    public void addFavorites(Integer repoID){
+        SharedPreferences pref
+                = getActivity().getSharedPreferences(FAV_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editList = pref.edit();
+        editList.putBoolean(repoID.toString(), true);
+        editList.commit();
+
+    }
+
+    public void removeFavorites(Integer repoID){
+        SharedPreferences pref
+                = getActivity().getSharedPreferences(FAV_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editList = pref.edit();
+        String key = repoID.toString();
+        editList.remove(key);
+        editList.commit();
     }
 }

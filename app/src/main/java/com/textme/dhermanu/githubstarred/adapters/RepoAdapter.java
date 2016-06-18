@@ -75,6 +75,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder>{
         TextView description = holder.description;
         TextView lang = holder.lang;
         TextView stargazers = holder.stargazers;
+
         ImageView repoImage = holder.repoImage;
         final Owner owner = repo.getOwner();
 

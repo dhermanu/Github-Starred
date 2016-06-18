@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <EditTextPreference
+        android:key="key"
+        android:title="Number of Days"
+        android:defaultValue="7"
+        android:inputType="number"
+        android:singleLine="true">
+
+    </EditTextPreference>
+
+    <ListPreference
+        android:title="Order"
+        android:key="order"
+        android:defaultValue="Descending"
+        android:entryValues="@array/pref_unit_value"
+        android:entries="@array/pref_unit_options">
+
+    </ListPreference>
+
+</PreferenceScreen>

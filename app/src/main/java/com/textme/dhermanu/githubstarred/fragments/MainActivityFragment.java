@@ -1,14 +1,17 @@
 package com.textme.dhermanu.githubstarred.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -74,17 +77,40 @@ public class MainActivityFragment extends Fragment {
 
                 else if(!checkConnection())
                     Toast.makeText(getContext(), NO_INTERNET,Toast.LENGTH_SHORT).show();
-
-                else if(checkConnection())
-                    updateList(queryFormat);
             }
-            else
-                updateList(queryFormat);
         }
 
 
         return rootview;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        queryFormat = getCurrentDate();
+        if(checkConnection()){
+            Toast.makeText(getContext(), "FETCHING NEW",Toast.LENGTH_SHORT).show();
+            updateList(queryFormat);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -136,7 +162,10 @@ public class MainActivityFragment extends Fragment {
     }
 
     private String getCurrentDate(){
-        int weekDay = 7;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String date = prefs.getString("key", "7");
+
+        int weekDay = Integer.parseInt(date);
         Time dayTime = new Time();
         dayTime.setToNow();
 
