@@ -1,5 +1,5 @@
 # Github-Starred
-This app will display the most starred repositories that was created last week. 
+This app will display the most starred repositories that was created last week and also saves favorited repositories. 
 
 # Phone
 
